@@ -38,8 +38,17 @@
         android:layout_height="wrap_content"
         android:importantForAutofill="no"
         android:inputType="phone"
-        app:layout_constraintTop_toBottomOf="@+id/loginPhoneLabel"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/loginPhoneLabel" />
+
+    <Button
+        android:id="@+id/sendCodeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_code_button"
+        android:textAllCaps="false"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPhone" />
 
     <TextView
         android:id="@+id/loginCodeLabel"
@@ -49,7 +58,7 @@
         android:layout_marginBottom="8sp"
         android:labelFor="@id/loginCode"
         android:text="@string/code_label"
-        app:layout_constraintTop_toBottomOf="@+id/loginPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/sendCodeButton" />
 
     <EditText
         android:id="@+id/loginCode"
@@ -57,8 +66,20 @@
         android:layout_height="wrap_content"
         android:importantForAutofill="no"
         android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@+id/loginCodeLabel"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/loginCodeLabel" />
+
+    <Button
+        android:id="@+id/resendCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8sp"
+        android:backgroundTint="@color/white"
+        android:text="@string/resend_code_label"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginCode" />
 
     <Button
         android:id="@+id/submitButton"
@@ -67,7 +88,9 @@
         android:layout_marginTop="30sp"
         android:backgroundTint="@color/purple_200"
         android:text="@string/submit_label"
+        android:textAllCaps="false"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/loginCode" />
+        app:layout_constraintTop_toBottomOf="@+id/resendCode" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
