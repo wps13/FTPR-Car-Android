@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyApiTest - Willane Paiva</string>
+    <string name="login_title">Login</string>
+    <string name="phone_label">Telefone</string>
+    <string name="code_label">Código de verification</string>
+    <string name="submit_label">Entrar</string>
 </resources>
