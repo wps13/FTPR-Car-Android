@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
-    private lateinit var verificationId: String
+    private var verificationId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun onLoginCodeChanged() {
         val code = binding.loginCode.text.toString()
-      checkCodeError(code)
+        checkCodeError(code)
     }
 
     private fun checkCodeError(code: String): Boolean {
@@ -88,7 +88,15 @@ class LoginActivity : AppCompatActivity() {
         val isPhoneError = checkPhoneError(phone)
         val isCodeError = checkCodeError(code)
         if (!isPhoneError && !isCodeError) {
-            val credential = PhoneAuthProvider.getCredential(verificationId, code)
+            if (verificationId == null) {
+                Toast.makeText(
+                    this@LoginActivity,
+                    R.string.error_no_validation,
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+            val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
             val auth = FirebaseAuth.getInstance()
             auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
@@ -110,7 +118,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun onCodeSend(){
+    private fun onCodeSend() {
         val phone = binding.loginPhone.text.toString()
         val hasError = checkPhoneError(phone)
         if (!hasError) {
@@ -125,6 +133,7 @@ class LoginActivity : AppCompatActivity() {
             PhoneAuthProvider.verifyPhoneNumber(options)
         }
     }
+
     private fun callbacks(): PhoneAuthProvider.OnVerificationStateChangedCallbacks {
         val cb = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
