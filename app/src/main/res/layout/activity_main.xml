@@ -30,7 +30,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/logoutCta"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@android:drawable/ic_menu_add" />
+                android:src="@drawable/ic_add" />
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/logoutCta"
                 android:layout_width="0dp"
