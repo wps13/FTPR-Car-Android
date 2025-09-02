@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupView() {
         binding.logoutCta.setOnClickListener { logout() }
+        binding.addCta.setOnClickListener { navigateToDetail() }
     }
 
     private fun logout() {
@@ -49,6 +50,11 @@ class MainActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun navigateToDetail() {
+       val intent = DetailActivity.newIntent(this)
+        startActivity(intent)
     }
 
     private fun requestLocationPermission() {
