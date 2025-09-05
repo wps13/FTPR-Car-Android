@@ -3,9 +3,20 @@ package com.example.myapitest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapitest.adapter.ItemCarAdapter
 import com.example.myapitest.databinding.ActivityMainBinding
+import com.example.myapitest.service.Result
+import com.example.myapitest.service.RetrofitClient
+import com.example.myapitest.service.safeApiCall
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,11 +29,11 @@ class MainActivity : AppCompatActivity() {
         requestLocationPermission()
         setupView()
 
-        // 1- Criar tela de Login com algum provedor do Firebase (Telefone, Google)
+        // 1- Criar tela de Login com algum provedor do Firebase (Telefone, Google) - DONE
         //      Cadastrar o Seguinte celular para login de test: +5511912345678
         //      Código de verificação: 101010
 
-        // 2- Criar Opção de Logout no aplicativo
+        // 2- Criar Opção de Logout no aplicativo - DONE
 
         // 3- Integrar API REST /car no aplicativo
         //      API será disponibilida no Github
@@ -30,7 +41,12 @@ class MainActivity : AppCompatActivity() {
         //      O Image Url deve ser uma foto armazenada no Firebase Storage
         //      { "id": "001", "imageUrl":"https://image", "year":"2020/2020", "name":"Gaspar", "licence":"ABC-1234", "place": {"lat": 0, "long": 0} }
 
-        // Opcionalmente trabalhar com o Google Maps ara enviar o place
+        //      GET cars -> doing
+        //      POST car -> TODO
+        //      GET car/{id} -> TODO
+        //      DELETE car/{id} -> TODO
+        //      PATCH car/{id} -> TODO
+        // Opcionalmente trabalhar com o Google Maps para enviar o place
     }
 
     override fun onResume() {
@@ -39,8 +55,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = true
+            fetchItems()
+        }
         binding.logoutCta.setOnClickListener { logout() }
-        binding.addCta.setOnClickListener { navigateToDetail() }
     }
 
     private fun logout() {
@@ -52,8 +72,8 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun navigateToDetail() {
-       val intent = DetailActivity.newIntent(this)
+    private fun navigateToDetail(id: String ) {
+        val intent = DetailActivity.newIntent(this@MainActivity, id)
         startActivity(intent)
     }
 
@@ -62,7 +82,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchItems() {
-        // TODO
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = safeApiCall { RetrofitClient.apiService.getCars() }
+
+            withContext(Dispatchers.Main) {
+                binding.swipeRefreshLayout.isRefreshing = false
+                when (result) {
+                    is Result.Success -> {
+                        val adapter = ItemCarAdapter(result.data) { item ->
+                            Log.d("Hello World", "Clicou no item ${item.name}")
+                            navigateToDetail(item.id)
+
+                        }
+                        binding.recyclerView.adapter = adapter
+                    }
+
+                    is Result.Error -> {
+                        Toast.makeText(this@MainActivity, "Erro", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     companion object {
