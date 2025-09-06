@@ -25,7 +25,7 @@ class ItemCarAdapter(
         val item = items[position]
         holder.model.text = item.name
         holder.year.text = item.year
-        holder.licence.text = item.license
+        holder.licence.text = item.licence
         holder.imageView.loadUrl(item.imageUrl)
         holder.itemView.setOnClickListener {
             itemClickListener(item)

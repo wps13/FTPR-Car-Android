@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapitest.databinding.ActivityDetailBinding
+import com.example.myapitest.model.CarLocation
 import com.example.myapitest.model.CarValue
 import com.example.myapitest.service.Result
 import com.example.myapitest.service.RetrofitClient
@@ -37,7 +38,48 @@ class DetailActivity : AppCompatActivity() {
 
 
     private fun saveCar() {
-        TODO("Not yet implemented")
+        val model = binding.model.text.toString()
+        val year = binding.year.text.toString()
+        val licence = binding.license.text.toString()
+        val carData = CarValue(
+            id = car.id,
+            imageUrl = car.imageUrl,
+            year = year,
+            name = model,
+            licence = licence,
+            // TODO - Update later
+            place = CarLocation(
+                lat = 1.0,
+                long = 1.2,
+            )
+        )
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = safeApiCall { RetrofitClient.apiService.updateCar(car.id, carData) }
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is Result.Success -> {
+                        car = result.data.value
+                        Toast
+                            .makeText(
+                                this@DetailActivity,
+                                R.string.item_detail_update_car_success,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+
+                    is Result.Error -> {
+                        Toast
+                            .makeText(
+                                this@DetailActivity,
+                                R.string.item_detail_update_car_error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                }
+            }
+        }
+
     }
 
     private fun deleteCar() {
@@ -68,7 +110,7 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadItem(){
+    private fun loadItem() {
         val itemId = intent.getStringExtra(ITEM_ID) ?: ""
         CoroutineScope(Dispatchers.IO).launch {
             val result = safeApiCall { RetrofitClient.apiService.getCar(itemId) }
@@ -80,21 +122,27 @@ class DetailActivity : AppCompatActivity() {
                         car = carData.value
                         handleSuccess()
                     }
+
                     is Result.Error -> handleError()
                 }
             }
-            Log.d("Hello World", "Carregou o Detalhe de $result")
         }
     }
 
     private fun handleSuccess() {
         binding.model.text = Editable.Factory.getInstance().newEditable(car.name)
         binding.year.text = Editable.Factory.getInstance().newEditable(car.year)
-        binding.license.text = car.license
+        binding.license.text = car.licence
     }
 
     private fun handleError() {
-        Toast.makeText(this, "Error loading item", Toast.LENGTH_SHORT).show()
+        Toast
+            .makeText(
+                this@DetailActivity,
+                R.string.item_detail_load_car_error,
+                Toast.LENGTH_SHORT
+            )
+            .show()
     }
 
 

@@ -10,11 +10,11 @@ data class CarValue(
     val imageUrl: String,
     val year: String,
     val name: String,
-    val license: String,
+    val licence: String,
     val place: CarLocation,
 )
 
 data class CarLocation (
-    val latitude: Double,
-    val longitude: Double
+    val lat: Double,
+    val long: Double
 )
