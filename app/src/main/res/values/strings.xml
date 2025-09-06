@@ -19,6 +19,7 @@
     <string name="item_detail_delete_car_error">Erro ao deletar o carro</string>
     <string name="item_detail_update_car_success">Carro atualizado com sucesso</string>
     <string name="item_detail_update_car_error">Erro ao atualizar o carro</string>
+    <string name="item_detail_update_car_form_invalid">Preencha todos os campos</string>
     <string name="item_detail_load_car_error">Erro ao carregar os dados do carro</string>
     <string name="create_add_button">Criar carro</string>
     <string name="create_add_button_loading">Criando carro</string>
@@ -39,4 +40,7 @@
     <string name="create_permission_gallery">Galeria de fotos</string>
     <string name="create_permission_denied">%1$s permissão negada</string>
     <string name="create_failed_load_image">Falha ao carregar imagem</string>
+    <string name="item_detail_model_hint">Honda</string>
+    <string name="item_detail_year_hint">2019/2019</string>
+    <string name="item_detail_licence_hint">ABC-1234</string>
 </resources>

@@ -12,6 +12,7 @@ import com.example.myapitest.model.CarValue
 import com.example.myapitest.service.Result
 import com.example.myapitest.service.RetrofitClient
 import com.example.myapitest.service.safeApiCall
+import com.example.myapitest.ui.loadUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +38,17 @@ class DetailActivity : AppCompatActivity() {
 
 
     private fun saveCar() {
+        if (!validateForm()) {
+            Toast
+                .makeText(
+                    this@DetailActivity,
+                    R.string.item_detail_update_car_form_invalid,
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+            return
+        }
+
         val model = binding.model.text.toString()
         val year = binding.year.text.toString()
         val licence = binding.license.text.toString()
@@ -132,6 +144,7 @@ class DetailActivity : AppCompatActivity() {
         binding.model.text = Editable.Factory.getInstance().newEditable(car.name)
         binding.year.text = Editable.Factory.getInstance().newEditable(car.year)
         binding.license.text = car.licence
+        binding.image.loadUrl(car.imageUrl)
     }
 
     private fun handleError() {
@@ -142,6 +155,33 @@ class DetailActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             )
             .show()
+    }
+
+    private fun validateForm(): Boolean {
+        val model = binding.model.text.toString()
+        val year = binding.year.text.toString()
+        val licence = binding.license.text.toString()
+
+        val areAllFieldsValid = model.isNotEmpty() && year.isNotEmpty() && licence.isNotEmpty()
+
+        if (areAllFieldsValid) {
+            binding.model.error = null
+            binding.year.error = null
+            binding.license.error = null
+            return true
+        }
+
+        if (model.isEmpty()) {
+            binding.model.error = getString(R.string.required_field)
+        }
+        if (year.isEmpty()) {
+            binding.year.error = getString(R.string.required_field)
+        }
+        if (licence.isEmpty()) {
+            binding.license.error = getString(R.string.required_field)
+        }
+
+        return false
     }
 
 
