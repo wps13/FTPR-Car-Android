@@ -41,7 +41,31 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun deleteCar() {
-        TODO("Not yet implemented")
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = safeApiCall { RetrofitClient.apiService.deleteCar(car.id) }
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is Result.Success -> {
+                        Toast
+                            .makeText(
+                                this@DetailActivity,
+                                R.string.item_detail_delete_car_success,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        finish()
+                    }
+
+                    is Result.Error -> {
+                        Toast
+                            .makeText(
+                                this@DetailActivity,
+                                R.string.item_detail_delete_car_error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun loadItem(){

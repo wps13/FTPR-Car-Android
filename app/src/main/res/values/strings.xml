@@ -15,4 +15,6 @@
     <string name="item_detail_save_button">Salvar</string>
     <string name="item_detail_delete_button">Deletar</string>
     <string name="item_detail_back_button">Voltar</string>
+    <string name="item_detail_delete_car_success">Carro deletado com sucesso</string>
+    <string name="item_detail_delete_car_error">Erro ao deletar o carro</string>
 </resources>
