@@ -47,6 +47,7 @@
         android:text="@string/send_code_button"
         android:textAllCaps="false"
         android:textSize="12sp"
+        android:backgroundTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginPhone" />
 
