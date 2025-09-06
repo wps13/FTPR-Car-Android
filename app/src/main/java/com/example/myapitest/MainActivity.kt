@@ -91,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                 when (result) {
                     is Result.Success -> {
                         val adapter = ItemCarAdapter(result.data) { item ->
-                            Log.d("Hello World", "Clicou no item ${item.name}")
                             navigateToDetail(item.id)
 
                         }
