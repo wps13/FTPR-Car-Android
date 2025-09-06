@@ -41,11 +41,6 @@ class MainActivity : AppCompatActivity() {
         //      O Image Url deve ser uma foto armazenada no Firebase Storage
         //      { "id": "001", "imageUrl":"https://image", "year":"2020/2020", "name":"Gaspar", "licence":"ABC-1234", "place": {"lat": 0, "long": 0} }
 
-        //      GET cars -> Done
-        //      POST car -> TODO
-        //      GET car/{id} -> Done
-        //      DELETE car/{id} -> Done
-        //      PATCH car/{id} -> Done
         // Opcionalmente trabalhar com o Google Maps para enviar o place
     }
 
