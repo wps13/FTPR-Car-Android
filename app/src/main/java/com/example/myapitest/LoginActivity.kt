@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import kotlinx.coroutines.Delay
 import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
@@ -90,32 +89,79 @@ class LoginActivity : AppCompatActivity() {
         val isCodeError = checkCodeError(code)
         if (!isPhoneError && !isCodeError) {
             if (verificationId == null) {
+                attemptPhoneVerification(phone, code)
+                return
+            }
+            signInWithCredential(code)
+        }
+    }
+
+    private fun signInWithCredential(code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+        val auth = FirebaseAuth.getInstance()
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    navigateToMainActivity()
+                } else {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        R.string.error_message_other,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+
+    private fun attemptPhoneVerification(phone: String, code: String) {
+        val auth = FirebaseAuth.getInstance()
+
+
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phone)
+            .setTimeout(30L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(createVerificationCallbacks(code))
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    private fun createVerificationCallbacks(expectedCode: String): PhoneAuthProvider.OnVerificationStateChangedCallbacks {
+        return object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                val auth = FirebaseAuth.getInstance()
+                auth.signInWithCredential(credential)
+                    .addOnCompleteListener(this@LoginActivity) { task ->
+                        if (task.isSuccessful) {
+                            navigateToMainActivity()
+                        } else {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                R.string.error_message_other,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+            }
+
+            override fun onVerificationFailed(e: FirebaseException) {
                 Toast.makeText(
                     this@LoginActivity,
                     R.string.error_no_validation,
                     Toast.LENGTH_SHORT
                 ).show()
-                return
             }
-            val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-            val auth = FirebaseAuth.getInstance()
-            auth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        navigateToMainActivity()
-                    } else {
-                        Toast.makeText(
-                            this@LoginActivity,
-                            R.string.error_message_other,
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
 
-
-                }
-
-
+            override fun onCodeSent(
+                verificationId: String,
+                resendToken: PhoneAuthProvider.ForceResendingToken
+            ) {
+                Log.d("LoginActivity", "Code sent, verificationId: $verificationId")
+                this@LoginActivity.verificationId = verificationId
+                this@LoginActivity.resendToken = resendToken
+                // Automatically proceed with the provided code
+                signInWithCredential(expectedCode)
+            }
         }
     }
 
