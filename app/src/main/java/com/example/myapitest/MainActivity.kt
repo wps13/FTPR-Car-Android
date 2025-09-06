@@ -41,11 +41,11 @@ class MainActivity : AppCompatActivity() {
         //      O Image Url deve ser uma foto armazenada no Firebase Storage
         //      { "id": "001", "imageUrl":"https://image", "year":"2020/2020", "name":"Gaspar", "licence":"ABC-1234", "place": {"lat": 0, "long": 0} }
 
-        //      GET cars -> doing
+        //      GET cars -> Done
         //      POST car -> TODO
-        //      GET car/{id} -> TODO
-        //      DELETE car/{id} -> TODO
-        //      PATCH car/{id} -> TODO
+        //      GET car/{id} -> Done
+        //      DELETE car/{id} -> Done
+        //      PATCH car/{id} -> Done
         // Opcionalmente trabalhar com o Google Maps para enviar o place
     }
 
@@ -61,6 +61,12 @@ class MainActivity : AppCompatActivity() {
             fetchItems()
         }
         binding.logoutCta.setOnClickListener { logout() }
+        binding.addCta.setOnClickListener { navigateToCreate() }
+    }
+
+    private fun navigateToCreate() {
+        val intent = CreateActivity.newIntent(this)
+        startActivity(intent)
     }
 
     private fun logout() {

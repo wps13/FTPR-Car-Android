@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import kotlinx.coroutines.Delay
 import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
@@ -63,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkCodeError(code: String): Boolean {
         if (code.isEmpty()) {
-            binding.loginCode.error = "Campo obrigatório"
+            binding.loginCode.error = getString(R.string.required_field)
             return true
         }
         return false
@@ -122,7 +123,6 @@ class LoginActivity : AppCompatActivity() {
         val phone = binding.loginPhone.text.toString()
         val hasError = checkPhoneError(phone)
         if (!hasError) {
-            val phone = binding.loginPhone.text.toString()
             val auth = FirebaseAuth.getInstance()
             val options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(phone)
