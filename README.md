@@ -4,6 +4,16 @@ Este projeto envolve a criação de uma tela de login com o Firebase, integraç�
 exibição de dados em um aplicativo Android.
 Siga as instruções abaixo para configurar e implementar as funcionalidades solicitadas.
 
+### Resultado do projeto
+
+https://github.com/user-attachments/assets/2649f245-4ea0-41a3-ade1-8e4c7954e349
+
+| Login | Listagem de carro | Criação | Detalhe |
+| ----- | ----- | -----| ----|
+| <img width="1080" height="2400" alt="Screenshot_20250912_135533" src="https://github.com/user-attachments/assets/2889c2c7-ae22-47cd-b45b-36c6a49f40c7" /> |<img width="1080" height="2400" alt="Screenshot_20250912_135610" src="https://github.com/user-attachments/assets/beaf77ec-4dca-4b47-827d-e0d137516de3" /> |<img width="1080" height="2400" alt="Screenshot_20250912_135737" src="https://github.com/user-attachments/assets/44ae5f3d-76e7-4e36-872c-7f7fd9755fcd" /> | <img width="1080" height="2400" alt="Screenshot_20250912_135752" src="https://github.com/user-attachments/assets/c48ed25e-0a38-42e1-bf50-5c368aa079bb" /> |
+
+
+
 ### Requisitos
 
 - **IDE**: Android Studio
