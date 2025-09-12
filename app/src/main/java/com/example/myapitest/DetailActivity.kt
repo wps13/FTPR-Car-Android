@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapitest.databinding.ActivityDetailBinding
@@ -13,14 +14,22 @@ import com.example.myapitest.service.Result
 import com.example.myapitest.service.RetrofitClient
 import com.example.myapitest.service.safeApiCall
 import com.example.myapitest.ui.loadUrl
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var car: CarValue
+
+    private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +43,36 @@ class DetailActivity : AppCompatActivity() {
         binding.saveButton.setOnClickListener { saveCar() }
         binding.deleteButton.setOnClickListener { deleteCar() }
         loadItem()
+        setupGoogleMap()
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        if (::car.isInitialized) {
+            loadItemLocationInGoogleMap()
+        }
+    }
+
+    private fun loadItemLocationInGoogleMap() {
+        car.place.apply {
+            binding.googleMapContent.visibility = View.VISIBLE
+            val latLong = LatLng(lat, long)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latLong)
+            )
+            mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    latLong,
+                    15f
+                )
+            )
+        }
+    }
+
+    private fun setupGoogleMap() {
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
 
@@ -145,6 +184,7 @@ class DetailActivity : AppCompatActivity() {
         binding.year.text = Editable.Factory.getInstance().newEditable(car.year)
         binding.license.text = car.licence
         binding.image.loadUrl(car.imageUrl)
+        loadItemLocationInGoogleMap()
     }
 
     private fun handleError() {
