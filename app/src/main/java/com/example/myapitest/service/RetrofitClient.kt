@@ -1,5 +1,6 @@
 package com.example.myapitest.service
 
+import com.example.myapitest.database.DatabaseBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,6 +21,11 @@ object RetrofitClient {
     }
 
     private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(
+            GeoLocationInterceptor(
+                DatabaseBuilder.getInstance().carLocationDao()
+            )
+        )
         .addInterceptor(loggingInterceptor)
         .build()
 

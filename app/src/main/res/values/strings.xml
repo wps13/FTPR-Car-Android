@@ -39,8 +39,10 @@
     <string name="create_permission_storage">Armazenamento interno</string>
     <string name="create_permission_gallery">Galeria de fotos</string>
     <string name="create_permission_denied">%1$s permissão negada</string>
-    <string name="create_failed_load_image">Falha ao carregar imagem</string>
+    <string name="create_failed_load_image">Falha no upload da imagem, tente novamente</string>
     <string name="item_detail_model_hint">Honda</string>
     <string name="item_detail_year_hint">2019/2019</string>
     <string name="item_detail_licence_hint">ABC-1234</string>
+    <string name="unknown_error">Erro desconhecido</string>
+    <string name="error_request_location_permission">Erro ao pegar permissão de localização</string>
 </resources>
