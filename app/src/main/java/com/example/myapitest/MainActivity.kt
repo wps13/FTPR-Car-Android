@@ -132,17 +132,21 @@ class MainActivity : AppCompatActivity() {
             requestLocationPermission()
             return
         }
-        fusedLocationProviderClient.lastLocation.addOnCompleteListener { task: Task<Location> ->
+        fusedLocationProviderClient.lastLocation.addOnCompleteListener { task: Task<Location?> ->
             if (task.isSuccessful) {
                 val location = task.result
-                Log.d("Hello World", "Lat: ${location.latitude} Long: ${location.longitude}")
-                val carLocation =
-                    CarLocation(latitude = location.latitude, longitude = location.longitude)
+                if (location != null) {
+                    Log.d("Hello World", "Lat: ${location.latitude} Long: ${location.longitude}")
+                    val carLocation =
+                        CarLocation(latitude = location.latitude, longitude = location.longitude)
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    DatabaseBuilder.getInstance()
-                        .carLocationDao()
-                        .insert(carLocation)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        DatabaseBuilder.getInstance()
+                            .carLocationDao()
+                            .insert(carLocation)
+                    }
+                } else {
+                    Log.w("MainActivity", "Last known location is null")
                 }
             } else {
                 Toast.makeText(this, R.string.unknown_error, Toast.LENGTH_SHORT).show()

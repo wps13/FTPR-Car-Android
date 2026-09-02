@@ -439,8 +439,10 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun loadCurrentLocation() {
         mMap.isMyLocationEnabled = true
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            val currentLocationLatLng = LatLng(location.latitude, location.longitude)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, 15f))
+            if (location != null) {
+                val currentLocationLatLng = LatLng(location.latitude, location.longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationLatLng, 15f))
+            }
         }
     }
 
